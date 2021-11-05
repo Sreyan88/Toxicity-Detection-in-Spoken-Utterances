@@ -21,7 +21,7 @@ get_transcripts(source,destination)
 
 #Importing Saved Transcripts
 
-data=pd.read_csv(destination+"Transcripts_txt",sep=';')
+data=pd.read_csv(destination+"Transcripts.txt",sep=';')
 
 data.columns = ["text", "labels"]
 
@@ -35,14 +35,12 @@ model = ClassificationModel(
 
 #Making predictions
 predictions=[]
-raw_outputs=[]
 
 for i in range(data.shape[0]):
 
-	temp_predictions, temp_raw_outputs = model.predict([data['text'].iloc[i]])
+	temp_predictions = model.predict([data['text'].iloc[i]])
 
 	predictions.append(temp_predictions)
-	raw_outputs.append(temp_raw_outputs)
 
 data['Predictions']=predictions
 

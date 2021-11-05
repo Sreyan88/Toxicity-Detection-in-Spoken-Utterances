@@ -11,7 +11,7 @@ def get_transcripts(source,destination):
     model = Wav2Vec2ForCTC.from_pretrained("facebook/wav2vec2-large-robust-ft-swbd-300h")
     model = model.to(device)
 
-    myfile = open(destination+"Transcripts_txt","w")
+    myfile = open(destination+"Transcripts.txt","w")
 
     for i in range(len(files)):
         
