@@ -1,0 +1,12 @@
+﻿Dataset,Segmentation Required,Notes
+MELD,No,"Prefix added according to parent folder. For example, in train folder when the original filename is ""dia0_utt0"" the new filename would be ""train_dia0_utt0"". Also the file is converted from mp4 into wav format."
+Common Voice,No,Files are converted from mp3 into wav format.
+LJ Speech,No,No Changes done to original file.
+VCTK,No,Files are converted from flac into wav format.
+iemocap,Yes,Files are already segmented in the original audio corpus. 
+MSP-Improv,No,No Changes done to original file.
+Switchboard,No,No Changes done to original file.
+CMU-MOSEI,Yes,"The new file is segmented using the start and end time present. The filename is ""original filename"" +""_""+ ""FileNameId""."
+CMU-MOSI,Yes,Files are already segmented in the original audio corpus. 
+Social-IQ,Yes,"The new file is segmented using the start and end time present with the addition of 0.2 seconds to both start and end time. The new file name is created using ""original filename"" + created(index) ""id"""
+MSP-Podcast,No,No Changes done to original file.
