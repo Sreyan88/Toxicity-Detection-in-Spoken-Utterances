@@ -19,7 +19,23 @@ work in literature and available datasets focus primarily on the modality of con
 
 ## Download the data
 
-Please visit - "some zenodo link" to download the raw data. Data are stored in .wav format and can be found in XXX.tar.gz files. Annotations can be found in the data <a href="https://github.com/SamdenLepcha/Toxicity-Detection-in-Spoken-Utterances/tree/main/data">folder</a>.
+The datasets can be downloaded through the use of links below. For some of the datasets requests to the respective labs might be required.
+
+| Dataset | Link |
+| --- | --- |
+| CMU-MOSEI | http://multicomp.cs.cmu.edu/resources/cmu-mosei-dataset/ |
+| CMU-MOSI | http://multicomp.cs.cmu.edu/resources/cmu-mosi-dataset/ |
+| Common Voice | https://commonvoice.mozilla.org/en/datasets (We had used Version 6.1 for our dataset). |
+| IEMOCAP | https://sail.usc.edu/iemocap/ |
+| LJ Speech | https://keithito.com/LJ-Speech-Dataset/  |
+| MELD  | https://affective-meld.github.io/ (Download raw data) |
+| MSP-Improv  | https://ecs.utdallas.edu/research/researchlabs/msp-lab/MSP-Improv.html |
+| MSP-Podcast  | https://ecs.utdallas.edu/research/researchlabs/msp-lab/MSP-Podcast.html |
+| Social-IQ  | https://www.thesocialiq.com/ |
+| SwitchBoard  | https://catalog.ldc.upenn.edu/LDC97S62 |
+| VCTK  | https://datashare.ed.ac.uk/handle/10283/2950 |
+
+Annotated dataset can be found in the data <a href="https://github.com/SamdenLepcha/Toxicity-Detection-in-Spoken-Utterances/tree/main/data">folder</a>.
 
 ## Description of the .csv files
 
