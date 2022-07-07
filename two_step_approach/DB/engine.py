@@ -33,16 +33,18 @@ class Engine(object):
 
         # meters
         self.state['meter_loss'] = tnt.meter.AverageValueMeter()
-        self.state['accuracy'] = torchmetrics.Accuracy(num_classes=2,average='weighted')
-        self.state['f1_score'] = torchmetrics.F1(num_classes=2,average='macro')
+        self.state['accuracy_train'] = torchmetrics.Accuracy(num_classes=2,average='weighted')
+        self.state['accuracy_valid'] = torchmetrics.Accuracy(num_classes=2,average='weighted')
+        self.state['accuracy_test'] = torchmetrics.Accuracy(num_classes=2,average='weighted')
+        self.state['f1_score_valid'] = torchmetrics.F1(num_classes=2,average='macro')
+        self.state['f1_score_test'] = torchmetrics.F1(num_classes=2,average='macro')
+
         # time measure
         self.state['batch_time'] = tnt.meter.AverageValueMeter()
         self.state['data_time'] = tnt.meter.AverageValueMeter()
 
         self.criterion = torch.nn.CrossEntropyLoss(reduction='mean').cuda(0)
 
-        
-    
     def _state(self,key):
         if key in self.state:
             return self.state[key]
@@ -51,27 +53,32 @@ class Engine(object):
         self.state['meter_loss'].reset()
         self.state['batch_time'].reset()
         self.state['data_time'].reset()
-        self.state['accuracy'].reset()
-        self.state['f1_score'].reset()
+        self.state['accuracy_train'].reset()
+        self.state['accuracy_valid'].reset()
+        self.state['accuracy_test'].reset()
+        self.state['f1_score_valid'].reset()
+        self.state['f1_score_test'].reset()
         self.state['model_output'] = []
         self.state['ground_truth'] = []
     
     def on_end_epoch(self):
         loss = self.state['meter_loss'].value()[0]
-        acc = self.state['accuracy'].compute()
         f1 = 0
 
         if self.state['mode']=='train':
+            acc = self.state['accuracy_train'].compute()
             print('Epoch: [{0}]\t'
                     'Loss {loss:.4f}'.format(self.state['epoch'], loss=loss))
         elif self.state['mode']=='val':
-            self.state['f1_score'](torch.cat(self.state['model_output']),torch.cat(self.state['ground_truth']).unsqueeze(1).to(dtype=torch.int))
-            f1 = self.state['f1_score'].compute()
+            acc = self.state['accuracy_valid'].compute()
+            self.state['f1_score_valid'](torch.cat(self.state['model_output']),torch.cat(self.state['ground_truth']).unsqueeze(1).to(dtype=torch.int))
+            f1 = self.state['f1_score_valid'].compute()
             print('====== F1 for epoch ',self.state['epoch'],' :: ',f1)
             print('Validation : \t Loss {loss:.4f}'.format(loss=loss))
         else:
-            self.state['f1_score'](torch.cat(self.state['model_output']),torch.cat(self.state['ground_truth']).unsqueeze(1).to(dtype=torch.int))
-            f1 = self.state['f1_score'].compute()
+            acc = self.state['accuracy_test'].compute()
+            self.state['f1_score_test'](torch.cat(self.state['model_output']),torch.cat(self.state['ground_truth']).unsqueeze(1).to(dtype=torch.int))
+            f1 = self.state['f1_score_test'].compute()
             print('Test : \t Loss {loss:.4f}'.format(loss=loss))
         return {'loss':loss,'accuracy':acc,'f1_score':f1, 'best_score_valid':self.state['best_score_valid'], 'best_score_test':self.state['best_score_test']}
     
@@ -85,7 +92,12 @@ class Engine(object):
         logits = self.state['output'].cpu()
         preds = torch.argmax(logits,axis=1)
         #preds = torch.flatten(torch.round(torch.sigmoid(logits)))
-        self.state['accuracy'](preds,self.state['target'])
+        if self.state['mode']=='train':
+            self.state['accuracy_train'](preds,self.state['target'])
+        elif self.state['mode']=='val':
+            self.state['accuracy_valid'](preds,self.state['target'])
+        else:
+            self.state['accuracy_test'](preds,self.state['target'])
 
 
     def on_forward(self,model,input_ids,token_type_ids,attention_masks,labels,optimizer=None,scheduler = None):
